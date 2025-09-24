@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-if ! command -v composer >/dev/null 2>&1; then
-  echo "❌ Composer не найден! Установите Composer и добавьте его в PATH."
-  exit 1
-else
-  echo "✅ Composer найден: $(composer --version)"
-fi
-
-
 echo "Введите название модуля (пример: vendor.module):"
 read MODULE_NAME
 
@@ -134,8 +126,8 @@ class ${VENDOR}_${MODULE} extends CModule
 
     public function DoUninstall()
         {
-            ModuleManager::unRegisterModule(self::MODULE_ID);
             \$this->UnInstallDB();
+            ModuleManager::unRegisterModule(self::MODULE_ID);
             \$this->UnInstallFiles();
             \$this->UnInstallEvents();
 
@@ -180,11 +172,11 @@ class ${VENDOR}_${MODULE} extends CModule
       {
           // TODO js lib
             // DeleteDirFiles(\$_SERVER["DOCUMENT_ROOT"] . "/local/modules/" . self::MODULE_ID . "/install/js",
-            //     \$_SERVER["DOCUMENT_ROOT"] . "/bitrix/js/", true, true);
+            //     \$_SERVER["DOCUMENT_ROOT"] . "/bitrix/js/");
 
           // TODO css lib
   //        DeleteDirFiles(\$_SERVER["DOCUMENT_ROOT"] . "/local/modules/" . self::MODULE_ID . "/install/css",
-  //            \$_SERVER["DOCUMENT_ROOT"] . "/bitrix/css/", true, true);
+  //            \$_SERVER["DOCUMENT_ROOT"] . "/bitrix/css/");
 
           // TODO admin page
           DeleteDirFiles(\$_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/' . self::MODULE_ID . '/install/admin',
@@ -295,7 +287,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-/* Создание конфига для js extentions модуля
+/* Создание конфига для js extensions модуля
 return [
     'js' => [
         "/local/modules/${BASE_DIR}/js/namespace/index.js",
@@ -321,7 +313,6 @@ EOF
 
 #TODO Директория admin ------------------------------------------------------------------------------------------------------
 
-# Создаём $BASE_DIR/admin/${VENDOR}.${MODULE}_settings.php
 # Создаём $BASE_DIR/admin/${VENDOR}.${MODULE}_settings.php
 cat > "$BASE_DIR/admin/${VENDOR}.${MODULE}_settings.php" <<EOF
 <?php
@@ -710,10 +701,17 @@ echo "Структура модуля создана в ${BASE_DIR}"
 #TODO установка composer в модуль
 echo "Выполняется авто-инициализация composer..."
 
+if ! command -v composer >/dev/null 2>&1; then
+  echo "❌ Composer не найден! Установите Composer и добавьте его в PATH."
+  exit 1
+else
+  echo "✅ Composer найден: $(composer --version)"
+fi
+
 cat > "$BASE_DIR/composer.json" <<EOF
 {
     "name": "${VENDOR}/${MODULE}",
-    "description": "Bitrix module ${VENDOR}.${MODULE}",
+    "description": "Sotbit module ${VENDOR}.${MODULE}",
     "type": "project",
     "license": "proprietary",
     "autoload": {
@@ -734,4 +732,4 @@ EOF
 
 cd "$BASE_DIR"
 composer install
-echo "Установка composer завершена"
+echo "Инициализация composer завершена"
