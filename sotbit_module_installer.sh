@@ -705,7 +705,7 @@ if ! command -v composer >/dev/null 2>&1; then
   echo "❌ Composer не найден! Установите Composer и добавьте его в PATH."
   exit 1
 else
-  echo "✅ Composer найден: $(composer --version)"
+  echo "✅ Версия composer: $(composer --version)"
 fi
 
 cat > "$BASE_DIR/composer.json" <<EOF
